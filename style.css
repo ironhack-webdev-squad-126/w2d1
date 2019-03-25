@@ -23,6 +23,11 @@ button {
     background-color: red;
 }
 
+.groceries li {
+    cursor: pointer;
+    user-select: none;
+}
+
 li.purchased {
     text-decoration: line-through;
 }

@@ -38,7 +38,7 @@ console.dir(myButton)
 setInterval(function() {
     const nextItem = document.querySelector('li')
     if (!nextItem) return
-    nextItem.classList.toggle('purchased')
+    // nextItem.classList.toggle('purchased')
     // nextItem.classList.replace('not-purchased', 'purchased')
     // console.log('nextItem :', nextItem.classList)
     // classList.value.includes('purchased')
@@ -47,3 +47,35 @@ setInterval(function() {
     // classList.toggle()
     // classList.value
 }, 2000)
+
+// document.querySelector('button').addEventListener('click', evt => {
+//     const nextItem = document.querySelector('li.not-purchased')
+//     if (!nextItem) return
+//     nextItem.classList.replace('not-purchased', 'purchased')
+// })
+
+document.querySelectorAll('.groceries li').forEach(function(listItem) {
+    listItem.addEventListener('click', evt => {
+        evt.target.classList.toggle('purchased')
+    })
+})
+
+document.querySelector('button').addEventListener('click', evt => {
+    const newItemText = document.querySelector('#groceries-input').value
+    if (
+        Array.from(document.querySelectorAll('.groceries li')).find(listItem => {
+            if (listItem.innerHTML.toLowerCase().trim() === newItemText.toLowerCase().trim()) return true
+        })
+    ) {
+        return
+    }
+
+    const newItem = document.createElement('li')
+    newItem.addEventListener('click', evt => {
+        evt.target.classList.toggle('purchased')
+    })
+    newItem.innerHTML = newItemText
+    newItem.classList.add('not-purchased')
+    document.querySelector('ul.groceries').prepend(newItem)
+    document.querySelector('#groceries-input').value = ''
+})
