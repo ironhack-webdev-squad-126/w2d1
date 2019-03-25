@@ -6,8 +6,6 @@ const introDiv = document.querySelector('.intro')
 const buttons = document.getElementsByTagName('button')
 const myButton = buttons[0]
 
-console.dir(myButton)
-
 // setInterval(function() {
 //     if (myButton.style.backgroundColor === 'yellow') {
 //         myButton.style.backgroundColor = 'red'
@@ -61,7 +59,9 @@ document.querySelectorAll('.groceries li').forEach(function(listItem) {
 })
 
 document.querySelector('button').addEventListener('click', evt => {
+    if (document.querySelector('#error')) document.querySelector('#error').remove()
     const newItemText = document.querySelector('#groceries-input').value
+
     if (
         Array.from(document.querySelectorAll('.groceries li')).find(listItem => {
             if (listItem.innerHTML.toLowerCase().trim() === newItemText.toLowerCase().trim()) return true
@@ -70,12 +70,27 @@ document.querySelector('button').addEventListener('click', evt => {
         return
     }
 
-    const newItem = document.createElement('li')
-    newItem.addEventListener('click', evt => {
-        evt.target.classList.toggle('purchased')
-    })
-    newItem.innerHTML = newItemText
-    newItem.classList.add('not-purchased')
-    document.querySelector('ul.groceries').prepend(newItem)
-    document.querySelector('#groceries-input').value = ''
+    if (newItemText.length === 0) {
+        try {
+            throw new Error('Please enter a title')
+        } catch (err) {
+            console.error(err)
+            console.warn('Please write better code')
+            const errorMessage = document.createElement('p')
+            errorMessage.id = 'error'
+            errorMessage.innerHTML = err.message
+            errorMessage.style.color = '#cc0000'
+
+            document.body.appendChild(errorMessage)
+        }
+    } else {
+        const newItem = document.createElement('li')
+        newItem.addEventListener('click', evt => {
+            evt.target.classList.toggle('purchased')
+        })
+        newItem.innerHTML = newItemText
+        newItem.classList.add('not-purchased')
+        document.querySelector('ul.groceries').prepend(newItem)
+        document.querySelector('#groceries-input').value = ''
+    }
 })
